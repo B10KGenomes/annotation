@@ -1,0 +1,5 @@
+formatdb = /share/app/blast-2.2.26/bin/formatdb
+blastall = /share/app/blast-2.2.26/bin/blastall
+genewise = /share/app/wise2.4.1/bin/genewise
+python = /share/app/Python-2.7.15/bin/python
+muscle = /share/app/muscle-3.8.1551/bin/muscle

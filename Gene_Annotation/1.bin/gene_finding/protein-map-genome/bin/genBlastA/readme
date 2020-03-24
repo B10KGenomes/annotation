@@ -1,0 +1,189 @@
+/*********************************README*******************************/
+
+GENBLASTA RELEASE V1.0
+
+
+Maintained by: 
+
+Rong She		
+School of Computing Science
+Simon Fraser University
+(Sep. 2008)
+
+/**********************************************************************/
+
+1. FUNCTIONALITY
+
+Blast or WuBlast are local alignment tools that give the user fragments of the 
+target sequence that are homologous to query fragments. Their results are shown 
+as HSPs, i.e., high-scoring-pairs. However, HSPs are fragmented and do not 
+exhibit obvious relationships between one another. This poses difficulty for 
+users to make sense of the Blast output. This program is designed to group the 
+HSPs from Blast into sensible groups, so that each group of HSPs represents a 
+potential target gene that is homologous to the query gene. 
+
+Currently, this program takes as input query protein or DNA sequences and target DNA 
+database, and employs Blast (or WuBlast) to blast through the given sequences, after which 
+the HSPs are further processed into groups. HSP groups are ranked according to 
+the score of the entire group. Such score is a measure that is internal to 
+genBlastA and represents the extent of homology to the query. Users can then 
+check through the ranked list of HSP groups and locate the target gene that is 
+of interest.
+
+2. INSTALLATION
+
+Currently genBlastA has been confirmed to work on the following platforms:
+
+- Linux-2.6-i686
+
+For each platform, a binary file of genBlastA has been compiled and packaged with 
+Blast, which can be downloaded from (~genBlastA web page~). Please use these 
+binaries only on its intended platform, since different operating systems / 
+processor architectures have various differences when executing the same code.
+
+To install genBlastA, unzip the corresponding genBlastA package into a new, empty 
+directory. This release includes Blast binaries so that the user can run blast 
+query and group the resulted HSPs at once. 
+
+2.1. SETTING PERMISSION
+
+Please make sure that the permissions of all files are set to be executable. 
+This can be done by using the "chmod" command on the command line:
+
+chmod -R 'u+x' *
+
+2.2. SETTING ENVIRONMENT VARIABLE
+
+The simplest way to run genBlastA is to run it from the directory where all 
+executables are located. However, if the user chooses to run genBlastA from other 
+directory, (e.g. by adding the genBlastA directory to the PATH environment 
+variable,) an additional GBLAST_PATH environment variable must also be set to 
+point to the genBlastA directory. For example, if the genBlastA package is at 
+/usr/genblasta/linux-2.6-i686, and the user wants to run genBlastA from any other 
+directory, the user should set GBLAST_PATH to be /usr/genblasta/linux-2.6-i686. 
+This can be done at the command line before running genBlastA command.
+
+Commands for setting environment variables are different based on the 
+operating system and the shell used. An example for setting it on C Shell in 
+Unix/Linux is:
+
+setenv GBLAST_PATH "/usr/bin/genblasta"
+- Sets the environment GBLAST_PATH path to /usr/bin/genblasta directory.
+
+For details on how to set environment variables, please refer to your Unix/Linux 
+manual.
+
+3. USAGE
+
+3.1. REQUIRED INPUT FILES
+
+This program is currently designed to be run from the command line. This release 
+also includes Blast binaries so that the user only needs to run a single 
+command. Blast is the default search program used by genBlastA. However, the user 
+may also use WuBlast instead of Blast by specifying the "-P" option. See 3.2 for 
+details.
+
+The user needs to supply a query file that contains a list of 
+query protein or DNA sequences, and a target file that contains the target DNA 
+sequences to be blasted. All sequences should be in FASTA format.
+
+A sample query file and target file have been included in the package:
+- query: "seqList.txt" (This file can be found under the others directory)
+- target: "elegans.WS170.dna.fa" (This file can be found in genomes.zip under the others directory)
+
+Both query and target files are in plain text format (FASTA sequences), with any 
+filename and/or extension. Both the query and the target file may contain 
+multiple sequences. Each query sequence will be blasted against all target 
+sequences. The result for all query sequences will be in the same output file, 
+in the same order as their order in the query file.
+
+To specify the query filename, use "-q" option:
+-q seqList.txt
+
+To specify the target filename, use "-t" option:
+-t elegans.WS170.dna.fa
+
+
+3.2. OPTIONAL PARAMETERS
+
+There are several other optional command line parameters, which are described as 
+follows:
+
+-P	Which program is used to generate sequence alignments between query sequence 
+	and the target database. It can be either "blast" or "wublast". If not speci-
+	fied, it's defaulted to "blast". When using "wublast", the linux version of 
+	WuBlast binaries must be present in the same directory as genBlastA.
+
+-p	Whether input query sequences are protein sequences. It is a parameter for 
+running Blast/WuBlast. The value should be "T" (for using protein sequences as query) 
+or "F" (for using DNA sequences as query). If not specified, it's defaulted to 
+"T".
+
+-e	The e-value. It is a parameter for running Blast/WuBlast, if not specified, the 
+default value is set at 1e-2. 
+
+-g	Perform gapped alignment. It is also a parameter for running Blast/WuBlast. Its 
+value should be "T" or "F". If not specified, it's defaulted to "T".
+
+-f	Perform filtering. Also a parameter for Blast/WuBlast (T/F). If not specified, 
+default value is "F".
+
+-a	Weight of penalty for skipping HSPs in a HSP group. A genBlastA-specific 
+parameter. Its value is between 0 and 1. If not specified, default is 0.5. This 
+weight is relative to the penalty for missing gene coverage in a HSP group, with 
+the sum of both weights to be 1.
+
+-d	Maximum allowed distance between HSPs within the same HSP group. A genBlastA-
+specific parameter. Its value should be a non-negative integer. If not 
+specified, default is 100000.
+
+-r	The number of ranks in genBlast output. A genBlastA-specific parameter. Its 
+value should be a positive integer. If not specified, HSP groups at all ranks 
+will be outputted.
+
+-c	Minimum percentage of query gene coverage of the HSP group in the output. In 
+float point format, with the value between 0 and 1, e.g. in order to restrict 
+the output to HSP groups that cover at least 50% of query gene, use "-c 0.5". If 
+not specified, HSP groups with all query coverage will be outputted.
+
+-s	Minimum score of the HSP group in the output. In float point format, can be 
+any real number. If not specified, HSP groups with any score will be outputted.
+
+-o	Output filename. If not specified, the output file will have the same name 
+as the query filename, except with ".gblast" extension.
+
+--------------------------------------------------------------------------
+Example of genBlast command:
+
+(1) run genBlastA with all default settings
+genblasta -q myquery -t mytarget
+
+(2) run genBlastA with optional non-default settings:
+genblasta -P wublast -q myquery -t mytarget -e 10 -g F -f T -a 0.25 -d 200000 -r 10 
+-c 0.5 -s 0 -o myoutput
+
+--------------------------------------------------------------------------
+
+Note that the options "-r", "-c", "-s" are only used to restrict the number of 
+HSP groups in the output. However, no matter how these options are specified, 
+there will be at least one HSP group (the top-ranked group) in the output 
+(because a genBlastA run without any output is probably never intended).
+
+
+3.3. BRIEF COMMAND LINE HELP
+
+For a brief description of all command line options, simply type the following 
+command on the command line:
+
+genblasta
+
+
+/**********************************************************************/
+
+genBlastA will produce some intermediate files during its processing, including 
+three database index files that are used by Blast/WuBlast, the ".blast" or 
+".wublast" result from Blast/WuBlast output, a ".report" file that is parsed 
+from the Blast/WuBlast result. The final output file is the one specified by 
+the user, or if not specified, the file with ".gblast" extension.
+
+/**********************************************************************/
