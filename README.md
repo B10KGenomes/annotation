@@ -5,7 +5,7 @@
 
 Requirements: muscle, genewise, blast.
 
-To run this pipeline, please refer to `sample_work.sh`. Because of the limitation of github, the files GALGA.fa, TAEGU.fa, and HUMAN.fa need to be provided separately (details as `sample_work.sh`). These files can be downloaded from LINK
+To run this pipeline, please refer to `sample_work.sh`.
 
 ## Orthologs Identified by Synteny
  Identification of orthologs based on synteny in B10K phase2
