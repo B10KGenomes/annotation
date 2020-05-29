@@ -27,10 +27,7 @@ perl ${SCRIPTS_DIR}/97.ort_rbh.syn.pl ${ALL_OUTPUT_FILES}/${ref}.${tag}/${ref}.$
 
 awk '{print $2"\t"$1"\t"$5"\t"$6}' ${ALL_OUTPUT_FILES}/${ref}.${tag}/${ref}.${tag}.intersect.ortholog.list.order.ort.cor.rbh | sort -k1,1 > ${ALL_OUTPUT_FILES}/${ref}.${tag}/${refId}_${tagId}.orthlog
 
-echo step6: RBH based on gene synteny and retain all the Tandem
-perl ${SCRIPTS_DIR}/97.ort_rbh.syn.all.pl ${ALL_OUTPUT_FILES}/${ref}.${tag}/${ref}.${tag}.intersect.ortholog.list.order.ort.cor ${refId} ${tagId} > ${ALL_OUTPUT_FILES}/${ref}.${tag}/${refId}_${tagId}.orthlog.all
-
 cd -
 echo ==========end at : `date` ==========
-echo run 98.merge_table.pl list_of_all_.ortholog_files to get merged table, or 98.merge_table.v2.pl list_of_.ortholog.all_files to get merged table containing Tandem
+echo run 98.merge_table.pl list_of_all_.ortholog_files to get merged table
 
